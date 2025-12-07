@@ -22,13 +22,10 @@ const RegistrationPaymentPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  // Load saved data from localStorage only if present
   useEffect(() => {
     const saved = localStorage.getItem("admissionData");
     if (saved) setRegForm(JSON.parse(saved));
   }, []);
-
-  // Dynamically load Razorpay script
   const loadRazorpayScript = (): Promise<boolean> => {
     return new Promise((resolve) => {
       if (document.getElementById("razorpay-script")) return resolve(true);
@@ -74,7 +71,7 @@ const RegistrationPaymentPage: React.FC = () => {
         name: "Sanjeevni Pathshala",
         description: "Registration Fee",
         handler: async () => {
-          setSuccess(true); // Show full-screen success
+          setSuccess(true);
           localStorage.removeItem("admissionData");
         },
         prefill: {
@@ -100,7 +97,6 @@ const RegistrationPaymentPage: React.FC = () => {
     openRazorpay();
   };
 
-  // Success screen
   if (success) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-green-100 to-green-200 animate-fadeIn">
@@ -122,7 +118,6 @@ const RegistrationPaymentPage: React.FC = () => {
     );
   }
 
-  // Form page
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-yellow-50 via-pink-50 to-purple-50 px-6">
       <Toaster position="top-center" />
@@ -158,12 +153,9 @@ const RegistrationPaymentPage: React.FC = () => {
           readOnly
           className="w-full border px-4 py-2 rounded-lg bg-gray-100 text-black"
         />
-
-        {/* Edit Admission Details button */}
         <button
           type="button"
           onClick={() => {
-            // Set edit flag and redirect
             localStorage.setItem("editAdmission", "true");
             router.push("/admission");
           }}

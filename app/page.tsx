@@ -20,7 +20,6 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="relative min-h-screen bg-linear-to-b from-yellow-50 via-pink-50 to-purple-50 text-purple-800">
-      {/* Hero Section */}
       <section className="text-center py-24 px-4">
         <h1 className="text-4xl md:text-5xl font-extrabold text-pink-500 mb-4">
           Welcome to Sanjeevni Coaching
@@ -29,8 +28,6 @@ const HomePage: React.FC = () => {
           We guide students with love, fun, and dedication! Learn smarter, grow faster.
         </p>
       </section>
-
-      {/* Features / About */}
       <section className="py-16 px-6 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-xl transition">
           <h2 className="text-2xl font-semibold text-pink-500 mb-2">Experienced Teachers</h2>
@@ -45,8 +42,6 @@ const HomePage: React.FC = () => {
           <p>Choose a timing that fits your routine. We ensure personalized attention.</p>
         </div>
       </section>
-
-      {/* Classes Offered */}
       <section className="py-16 px-6 max-w-5xl mx-auto">
         <h2 className="text-3xl font-bold text-pink-500 mb-6 text-center">Classes We Offer</h2>
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6 text-center">
@@ -60,8 +55,6 @@ const HomePage: React.FC = () => {
           ))}
         </div>
       </section>
-
-      {/* Why Choose Us */}
       <section className="py-16 px-6 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="bg-pink-100 p-6 rounded-xl shadow text-center">
           <h3 className="text-xl font-semibold text-pink-500 mb-2">Personalized Attention</h3>
@@ -76,8 +69,6 @@ const HomePage: React.FC = () => {
           <p>Students can pick timings that fit their routine without stress.</p>
         </div>
       </section>
-
-      {/* Call to Action */}
       <section className="py-16 px-6 text-center">
         <h2 className="text-3xl font-bold text-pink-500 mb-4">Join Us Today!</h2>
         <p className="text-purple-700 mb-6">Admissions open for classes 1 to 10. Secure your seat now.</p>
@@ -88,8 +79,6 @@ const HomePage: React.FC = () => {
           Apply Now
         </a>
       </section>
-
-      {/* Floating Action Buttons */}
       <div className="fixed bottom-6 right-6 flex flex-col gap-4 z-50">
         <a
           href="tel:+911234567890"

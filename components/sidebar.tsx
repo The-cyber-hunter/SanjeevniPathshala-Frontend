@@ -26,7 +26,6 @@ const Sidebar: React.FC = () => {
 
   return (
     <>
-      {/* Mobile Hamburger */}
       <button
         className={`md:hidden fixed top-4 left-4 z-60 text-3xl ${
           open ? "text-white" : "text-purple-700"
@@ -35,16 +34,12 @@ const Sidebar: React.FC = () => {
       >
         {open ? <HiX /> : <HiMenu />}
       </button>
-
-      {/* Mobile Overlay */}
       {open && (
         <div
           className="fixed inset-0 bg-black/40 z-50 md:hidden"
           onClick={() => setOpen(false)}
         />
       )}
-
-      {/* Sidebar */}
       <aside
         className={`
           w-64 bg-purple-700 text-white transition-transform duration-300
@@ -54,12 +49,9 @@ const Sidebar: React.FC = () => {
         `}
       >
         <div className="flex flex-col h-full md:h-screen">
-          {/* Header */}
           <div className="p-6 text-center border-b border-purple-600">
             <h1 className="text-2xl font-bold">Admin Panel</h1>
           </div>
-
-          {/* Navigation */}
           <nav className="flex-1 overflow-y-auto mt-6">
             {links.map((link) => {
               const isActive = pathname === link.path;
@@ -77,8 +69,6 @@ const Sidebar: React.FC = () => {
               );
             })}
           </nav>
-
-          {/* Footer */}
           <div className="mt-auto w-full p-6 border-t border-purple-600 flex flex-col gap-2">
             <button
               onClick={handleLogout}

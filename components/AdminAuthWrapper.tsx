@@ -12,7 +12,7 @@ const AdminAuthWrapper: React.FC<Props> = ({ children }) => {
 
   useEffect(() => {
     const loggedIn = localStorage.getItem("adminLoggedIn");
-    if (!loggedIn) router.push("/admin"); // redirect to login
+    if (!loggedIn) router.push("/login-admin"); 
     else setLoading(false);
   }, [router]);
 

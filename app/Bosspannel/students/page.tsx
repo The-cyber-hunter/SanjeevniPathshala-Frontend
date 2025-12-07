@@ -13,9 +13,6 @@ export default function StudentsPage() {
   const [search, setSearch] = useState("");
   const [classFilter, setClassFilter] = useState("All");
 
-  // -------------------------
-  // LOGIN PROTECTION + AUTO LOGOUT
-  // -------------------------
   useEffect(() => {
     const logged = localStorage.getItem("adminLoggedIn");
     const loginTime = localStorage.getItem("adminLoginTime");
@@ -38,15 +35,12 @@ export default function StudentsPage() {
     loadStudents();
   }, []);
 
-  // -------------------------
-  // FETCH STUDENTS FROM BACKEND
-  // -------------------------
   const loadStudents = async () => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/students`);
       const data = await res.json();
       setStudents(data.students);
-      setAllStudents(data.students); // keep full data for filtering
+      setAllStudents(data.students);
     } catch (err) {
       console.error("Failed to fetch students:", err);
     } finally {
@@ -54,9 +48,6 @@ export default function StudentsPage() {
     }
   };
 
-  // -------------------------
-  // FILTER LOGIC
-  // -------------------------
   const handleClassFilter = (cls: string) => {
     setClassFilter(cls);
     if (cls === "All") {

@@ -11,7 +11,7 @@ const AdminLoginPage: React.FC = () => {
   const [isLocked, setIsLocked] = useState(false);
 
   const MAX_ATTEMPTS = 3;
-  const LOCK_TIME = 5 * 60 * 1000; // 5 minutes
+  const LOCK_TIME = 5 * 60 * 1000; 
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +32,6 @@ const AdminLoginPage: React.FC = () => {
       const data = await res.json();
 
       if (res.ok) {
-        // ✅ Correct login
         localStorage.setItem("adminLoggedIn", "true");
         localStorage.setItem("adminLoginTime", Date.now().toString());
 

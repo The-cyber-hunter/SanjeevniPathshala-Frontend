@@ -12,10 +12,6 @@ export default function ResetPasswordPage() {
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-    // -------------------------------
-    // BLOCK ENTRY WITHOUT OTP VERIFY
-    // -------------------------------
     useEffect(() => {
         const allowed = sessionStorage.getItem("otpVerified");
         if (!allowed) {
@@ -58,8 +54,6 @@ export default function ResetPasswordPage() {
                 <h1 className="text-2xl font-bold text-black text-center">
                     Reset Password
                 </h1>
-
-                {/* PASSWORD */}
                 <div>
                     <label className="block text-black mb-1">New Password</label>
                     <div className="relative">
@@ -79,8 +73,6 @@ export default function ResetPasswordPage() {
                         </button>
                     </div>
                 </div>
-
-                {/* CONFIRM PASSWORD */}
                 <div>
                     <label className="block text-black mb-1">Confirm Password</label>
                     <div className="relative">

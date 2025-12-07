@@ -6,8 +6,6 @@ import { toast, Toaster } from "react-hot-toast";
 
 const AdmissionPage: React.FC = () => {
   const router = useRouter();
-
-  // Form state
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,7 +16,6 @@ const AdmissionPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    // Check if user clicked "Edit Admission Details"
     const editMode = localStorage.getItem("editAdmission");
     if (editMode === "true") {
       const savedData = localStorage.getItem("admissionData");
@@ -26,7 +23,7 @@ const AdmissionPage: React.FC = () => {
         setFormData(JSON.parse(savedData));
         console.log("📝 Loaded saved admission data:", JSON.parse(savedData));
       }
-      localStorage.removeItem("editAdmission"); // remove flag after loading
+      localStorage.removeItem("editAdmission"); 
     }
   }, []);
 

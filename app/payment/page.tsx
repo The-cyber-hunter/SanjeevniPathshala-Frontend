@@ -24,9 +24,6 @@ const MonthlyPaymentPage: React.FC = () => {
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
 
-  // -----------------------------
-  // Load Razorpay script dynamically
-  // -----------------------------
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
@@ -40,10 +37,6 @@ const MonthlyPaymentPage: React.FC = () => {
     };
     document.body.appendChild(script);
   }, []);
-
-  // -----------------------------
-  // Handle input changes
-  // -----------------------------
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -52,10 +45,6 @@ const MonthlyPaymentPage: React.FC = () => {
       console.log("✏️ Input changed:", e.target.name, e.target.value);
     }
   };
-
-  // -----------------------------
-  // Check if student is registered
-  // -----------------------------
   const checkRegistration = async (): Promise<boolean> => {
     console.log("🔍 Checking registration for:", formData.email);
     try {
@@ -87,9 +76,6 @@ const MonthlyPaymentPage: React.FC = () => {
     }
   };
 
-  // -----------------------------
-  // Open Razorpay checkout
-  // -----------------------------
   const openRazorpay = async () => {
     if (!razorpayLoaded) {
       toast.error("Razorpay is not loaded yet. Please wait.");
@@ -99,8 +85,6 @@ const MonthlyPaymentPage: React.FC = () => {
     if (!(await checkRegistration())) return;
 
     const { email, name, phone, class: studentClass } = formData;
-
-    // Check all required fields
     if (!email || !name || !phone || !studentClass) {
       toast.error("All student details are required to proceed.");
       console.error("❌ Missing fields:", formData);
@@ -135,9 +119,6 @@ const MonthlyPaymentPage: React.FC = () => {
         return;
       }
 
-      // -----------------------------
-      // Razorpay checkout options
-      // -----------------------------
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
         amount: data.order.amount,
@@ -164,9 +145,6 @@ const MonthlyPaymentPage: React.FC = () => {
     }
   };
 
-  // -----------------------------
-  // Handle form submission
-  // -----------------------------
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("📩 Form submitted with:", formData);

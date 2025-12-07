@@ -20,8 +20,6 @@ export default function AdminDashboard() {
   const [notPaidCount, setNotPaidCount] = useState(0);
   const [revenue, setRevenue] = useState(0);
   const [chartData, setChartData] = useState<any[]>([]);
-
-  // Track mobile vs desktop for chart labels
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -76,7 +74,6 @@ export default function AdminDashboard() {
     <div className="p-6 min-h-screen bg-white text-black md:flex-1 md:p-6">
       <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
 
-      {/* CARDS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-purple-700 text-white p-6 rounded-xl shadow">
           <h2 className="text-xl font-semibold">Total Admitted Students</h2>
@@ -94,7 +91,6 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* CHART */}
       <div className="bg-white p-6 rounded-xl shadow mt-10">
         <h2 className="text-2xl font-semibold mb-4">Admitted Students Growth</h2>
         <ResponsiveContainer width="100%" height={300}>

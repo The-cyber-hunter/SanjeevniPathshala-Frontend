@@ -17,16 +17,13 @@ export default function PaymentsPage() {
   const router = useRouter();
 
   const [students, setStudents] = useState<Student[]>([]);
-  const [allStudents, setAllStudents] = useState<Student[]>([]); // full data
+  const [allStudents, setAllStudents] = useState<Student[]>([]); 
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
   const [classFilter, setClassFilter] = useState("All");
   const [monthFilter, setMonthFilter] = useState(new Date().toISOString().slice(0, 7));
 
-  // -------------------------
-  // LOGIN PROTECTION + AUTO LOGOUT
-  // -------------------------
   useEffect(() => {
     const logged = localStorage.getItem("adminLoggedIn");
     const loginTime = localStorage.getItem("adminLoginTime");
@@ -49,15 +46,12 @@ export default function PaymentsPage() {
     loadPayments();
   }, [monthFilter]);
 
-  // -------------------------
-  // FETCH PAYMENTS FROM BACKEND
-  // -------------------------
   const loadPayments = async () => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/payments?month=${monthFilter}`);
       const data = await res.json();
       setStudents(data.students);
-      setAllStudents(data.students); // keep original for filtering
+      setAllStudents(data.students); 
     } catch (err) {
       console.error("Failed to fetch payments:", err);
     } finally {
@@ -87,10 +81,6 @@ export default function PaymentsPage() {
       console.error("Toggle failed:", err);
     }
   };
-
-  // -------------------------
-  // FILTER LOGIC
-  // -------------------------
   const handleClassFilter = (cls: string) => {
     setClassFilter(cls);
     if (cls === "All") {

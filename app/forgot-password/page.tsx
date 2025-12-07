@@ -14,9 +14,6 @@ export default function ForgotPasswordPage() {
 
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-    // ---------------------------------------
-    // Countdown effect
-    // ---------------------------------------
     useEffect(() => {
         if (countdown <= 0) return;
 
@@ -27,9 +24,6 @@ export default function ForgotPasswordPage() {
         return () => clearInterval(timer);
     }, [countdown]);
 
-    // ---------------------------------------
-    // Send OTP
-    // ---------------------------------------
     const sendOTP = async (isResend = false) => {
         try {
             if (isResend) setIsResending(true);
@@ -55,9 +49,6 @@ export default function ForgotPasswordPage() {
         }
     };
 
-    // ---------------------------------------
-    // Verify OTP
-    // ---------------------------------------
     const verifyOTP = async () => {
         const otp = otpDigits.join("");
 
@@ -90,18 +81,12 @@ export default function ForgotPasswordPage() {
         }
     };
 
-    // ---------------------------------------
-    // Handle OTP typing, auto-focus, backspace, paste
-    // ---------------------------------------
     const handleOtpChange = (value: string, index: number) => {
-        if (/[^0-9]/.test(value)) return; // Only digits allowed
+        if (/[^0-9]/.test(value)) return; 
 
         const newOtp = [...otpDigits];
-        newOtp[index] = value.slice(-1); // only keep last typed
-
+        newOtp[index] = value.slice(-1); 
         setOtpDigits(newOtp);
-
-        // Auto move to next
         if (value && index < 5) {
             inputRefs.current[index + 1]?.focus();
         }
@@ -119,13 +104,9 @@ export default function ForgotPasswordPage() {
         if (pasteData.length === 6) {
             const digits = pasteData.split("").slice(0, 6);
             setOtpDigits(digits);
-
-            // Focus last box
             inputRefs.current[5]?.focus();
         }
     };
-
-    // ---------------------------------------
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-purple-100">
@@ -136,7 +117,6 @@ export default function ForgotPasswordPage() {
                     Forgot Password
                 </h1>
 
-                {/* STEP 1: Send OTP */}
                 {step === 1 && (
                     <button
                         onClick={() => sendOTP(false)}
@@ -146,7 +126,6 @@ export default function ForgotPasswordPage() {
                     </button>
                 )}
 
-                {/* STEP 2: Verify OTP */}
                 {step === 2 && (
                     <>
                         <div className="flex justify-between gap-2" onPaste={handlePaste}>
