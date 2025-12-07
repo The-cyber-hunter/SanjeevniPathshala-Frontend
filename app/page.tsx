@@ -22,7 +22,7 @@ const HomePage: React.FC = () => {
     <div className="relative min-h-screen bg-linear-to-b from-yellow-50 via-pink-50 to-purple-50 text-purple-800">
       <section className="text-center py-24 px-4">
         <h1 className="text-4xl md:text-5xl font-extrabold text-pink-500 mb-4">
-          Welcome to Sanjeevni Coaching
+          Welcome to Sanjeevni Pathshala
         </h1>
         <p className="text-lg md:text-xl text-purple-700 max-w-2xl mx-auto">
           We guide students with love, fun, and dedication! Learn smarter, grow faster.

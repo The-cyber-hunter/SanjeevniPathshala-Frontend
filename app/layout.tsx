@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import ClientLayoutWrapper from "./clientlayoutwrapper";
 
 export const metadata: Metadata = {
-  title: "Sanjeevni Coaching",
+  title: "Sanjeevni Pathshala",
   description: "Best coaching institute guiding students to success",
 };
 
