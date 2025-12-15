@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
         <nav className="w-full bg-white shadow-md fixed top-0 left-0 z-50 h-20">
             <div className="max-w-7xl mx-auto px-6 h-full flex justify-between items-center">
                 <Link href="/" className="text-2xl font-bold text-pink-500">
-                    Sanjeevni Coaching
+                    Sanjeevni Pathshala
                 </Link>
                 <ul className="hidden md:flex gap-8 text-lg font-medium text-purple-700">
                     <li>
