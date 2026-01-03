@@ -49,21 +49,6 @@ const Footer: React.FC = () => {
           </ul>
         </div>
 
-        <div>
-          <h3 className="text-xl font-bold text-pink-500 mb-4">Support Our NGO</h3>
-          <p className="text-purple-700 mb-4">
-            Join us in promoting education and community welfare through our NGO initiatives.
-          </p>
-          <a
-            href="https://chat.whatsapp.com/BsQXKGYx2hV6G2jIFzOehN"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded-full transition-colors duration-200"
-          >
-            Join WhatsApp Group
-          </a>
-        </div>
-
       </div>
 
       <div className="bg-pink-50 text-purple-700 text-center py-4 mt-6">
