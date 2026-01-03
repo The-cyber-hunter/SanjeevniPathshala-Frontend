@@ -81,14 +81,14 @@ const HomePage: React.FC = () => {
       </section>
       <div className="fixed bottom-6 right-6 flex flex-col gap-4 z-50">
         <a
-          href="tel:+911234567890"
+          href="tel:+916206895209"
           className="bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition"
         >
           <Phone size={24} />
         </a>
 
         <a
-          href="sms:+911234567890"
+          href="sms:+916206895209"
           className="bg-blue-500 hover:bg-blue-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition"
         >
           <MessageCircle size={24} />
