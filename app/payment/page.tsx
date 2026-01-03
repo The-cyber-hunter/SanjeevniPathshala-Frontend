@@ -11,6 +11,18 @@ interface StudentData {
   class: string;
 }
 
+/* ✅ CLASS-WISE MONTHLY FEE (DISPLAY ONLY) */
+const getMonthlyFee = (studentClass: string): number => {
+  const classNumber = parseInt(studentClass.replace(/\D/g, ""));
+
+  if (classNumber >= 1 && classNumber <= 4) return 150;
+  if (classNumber >= 5 && classNumber <= 6) return 175;
+  if (classNumber >= 7 && classNumber <= 8) return 200;
+  if (classNumber >= 9 && classNumber <= 10) return 250;
+
+  return 0;
+};
+
 const MonthlyPaymentPage: React.FC = () => {
   const router = useRouter();
   const [formData, setFormData] = useState<StudentData>({
@@ -24,40 +36,35 @@ const MonthlyPaymentPage: React.FC = () => {
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
 
+  /* ✅ CALCULATED MONTHLY FEE (UI ONLY) */
+  const monthlyFee = getMonthlyFee(formData.class);
+
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.onload = () => {
-      console.log("✅ Razorpay script loaded");
-      setRazorpayLoaded(true);
-    };
-    script.onerror = () => {
-      console.error("❌ Failed to load Razorpay script");
-      toast.error("Failed to load Razorpay script.");
-    };
+    script.onload = () => setRazorpayLoaded(true);
+    script.onerror = () => toast.error("Failed to load Razorpay script.");
     document.body.appendChild(script);
   }, []);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     if (!isRegistered) {
       setFormData({ ...formData, [e.target.name]: e.target.value });
-      console.log("✏️ Input changed:", e.target.name, e.target.value);
     }
   };
+
   const checkRegistration = async (): Promise<boolean> => {
-    console.log("🔍 Checking registration for:", formData.email);
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/student/status/${formData.email}`
       );
       const data = await res.json();
-      console.log("📦 Registration response:", data);
 
       if (!data.registered) {
         toast.error("Please complete registration first.");
         setIsRegistered(false);
-        console.warn("❌ Student not registered");
         return false;
       }
 
@@ -69,8 +76,7 @@ const MonthlyPaymentPage: React.FC = () => {
       });
       setIsRegistered(true);
       return true;
-    } catch (err) {
-      console.error("❌ Failed to verify registration:", err);
+    } catch {
       toast.error("Failed to verify registration.");
       return false;
     }
@@ -78,7 +84,7 @@ const MonthlyPaymentPage: React.FC = () => {
 
   const openRazorpay = async () => {
     if (!razorpayLoaded) {
-      toast.error("Razorpay is not loaded yet. Please wait.");
+      toast.error("Razorpay is not loaded yet.");
       return;
     }
 
@@ -86,15 +92,12 @@ const MonthlyPaymentPage: React.FC = () => {
 
     const { email, name, phone, class: studentClass } = formData;
     if (!email || !name || !phone || !studentClass) {
-      toast.error("All student details are required to proceed.");
-      console.error("❌ Missing fields:", formData);
+      toast.error("All student details are required.");
       return;
     }
 
     setLoading(true);
     try {
-      console.log("📝 Creating order for:", formData);
-
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/payment/create-order`,
         {
@@ -111,11 +114,8 @@ const MonthlyPaymentPage: React.FC = () => {
       );
 
       const data = await res.json();
-      console.log("📦 Create order response:", data);
-
       if (!res.ok) {
         toast.error(data.message || "Failed to create order.");
-        console.error("❌ Order creation failed:", data);
         return;
       }
 
@@ -126,19 +126,14 @@ const MonthlyPaymentPage: React.FC = () => {
         order_id: data.order.id,
         name: "Sanjeevni Pathshala",
         description: "Monthly Fee",
-        handler: () => {
-          console.log("✅ Payment successful");
-          setPaymentSuccess(true);
-        },
+        handler: () => setPaymentSuccess(true),
         prefill: { name, email, contact: phone },
         theme: { color: "#ec4899" },
       };
 
-      console.log("💳 Opening Razorpay with options:", options);
       const razorpay = new (window as any).Razorpay(options);
       razorpay.open();
-    } catch (err) {
-      console.error("❌ Failed to open Razorpay:", err);
+    } catch {
       toast.error("Failed to initiate payment.");
     } finally {
       setLoading(false);
@@ -147,17 +142,16 @@ const MonthlyPaymentPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("📩 Form submitted with:", formData);
     await openRazorpay();
   };
 
   if (paymentSuccess) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-yellow-50 via-pink-50 to-purple-50 px-6 text-center">
-        <h1 className="text-3xl font-bold text-pink-500 mb-4 animate-bounce">
+        <h1 className="text-3xl font-bold text-pink-500 mb-4">
           🎉 Payment Successful!
         </h1>
-        <p className="mb-6 text-purple-700 text-lg animate-fade-in">
+        <p className="mb-6 text-purple-700 text-lg">
           Your monthly fee payment is completed successfully.
         </p>
         <button
@@ -177,7 +171,7 @@ const MonthlyPaymentPage: React.FC = () => {
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded-lg p-8 space-y-6 w-full max-w-md"
       >
-        <h1 className="text-2xl font-bold text-pink-500 text-center mb-4">
+        <h1 className="text-2xl font-bold text-pink-500 text-center">
           Monthly Fee Payment
         </h1>
 
@@ -188,7 +182,7 @@ const MonthlyPaymentPage: React.FC = () => {
           onChange={handleChange}
           placeholder="Enter your email"
           required
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 text-purple-700 placeholder-purple-400"
+          className="w-full border px-4 py-2 rounded-lg bg-gray-100 text-black"
         />
 
         <input
@@ -198,7 +192,7 @@ const MonthlyPaymentPage: React.FC = () => {
           onChange={handleChange}
           placeholder="Enter your full name"
           required
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 text-purple-700 placeholder-purple-400"
+          className="w-full border px-4 py-2 rounded-lg bg-gray-100 text-black"
         />
 
         <input
@@ -208,7 +202,7 @@ const MonthlyPaymentPage: React.FC = () => {
           onChange={handleChange}
           placeholder="Enter your phone number"
           required
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 text-purple-700 placeholder-purple-400"
+          className="w-full border px-4 py-2 rounded-lg bg-gray-100 text-black"
         />
 
         <select
@@ -216,7 +210,7 @@ const MonthlyPaymentPage: React.FC = () => {
           value={formData.class}
           onChange={handleChange}
           required
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 text-purple-700"
+          className="w-full border px-4 py-2 rounded-lg bg-gray-100 text-black"
         >
           <option value="">Select Class</option>
           {[...Array(10)].map((_, i) => (
@@ -226,12 +220,22 @@ const MonthlyPaymentPage: React.FC = () => {
           ))}
         </select>
 
+        {monthlyFee > 0 && (
+          <p className="text-center font-semibold text-purple-700">
+            Monthly Fee: ₹{monthlyFee}
+          </p>
+        )}
+
         <button
           type="submit"
           disabled={loading || !razorpayLoaded}
           className="bg-pink-500 w-full text-white py-3 rounded-lg hover:bg-pink-600"
         >
-          {loading ? "Processing..." : "Pay Monthly Fee (₹200)"}
+          {loading
+            ? "Processing..."
+            : monthlyFee
+            ? `Pay Monthly Fee (₹${monthlyFee})`
+            : "Pay Monthly Fee"}
         </button>
       </form>
     </div>
