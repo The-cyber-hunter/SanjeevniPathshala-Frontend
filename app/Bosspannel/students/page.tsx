@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import * as XLSX from "xlsx";
 
 export default function StudentsPage() {
   const router = useRouter();
@@ -63,6 +64,21 @@ export default function StudentsPage() {
     s.phone.toLowerCase().includes(search.toLowerCase())
   );
 
+  const downloadExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(
+      filteredStudents.map((s) => ({
+        Name: s.name,
+        Email: s.email,
+        Phone: s.phone,
+        Class: s.class,
+        "Admission Date": new Date(s.createdAt).toLocaleDateString(),
+      }))
+    );
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Admissions");
+    XLSX.writeFile(wb, `Admissions.xlsx`);
+  };
+
   if (loading) return <p className="ml-64 p-6">Loading...</p>;
 
   return (
@@ -94,6 +110,13 @@ export default function StudentsPage() {
             );
           })}
         </select>
+
+        <button
+          onClick={downloadExcel}
+          className="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700"
+        >
+          Download Excel
+        </button>
       </div>
 
       {/* TABLE */}
