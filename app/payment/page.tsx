@@ -9,17 +9,16 @@ interface StudentData {
   email: string;
   phone: string;
   class: string;
+  monthlyPayments?: { amount: number; date: string }[];
 }
 
 /* ✅ CLASS-WISE MONTHLY FEE (DISPLAY ONLY) */
 const getMonthlyFee = (studentClass: string): number => {
   const classNumber = parseInt(studentClass.replace(/\D/g, ""));
-
   if (classNumber >= 1 && classNumber <= 4) return 150;
   if (classNumber >= 5 && classNumber <= 6) return 175;
   if (classNumber >= 7 && classNumber <= 8) return 200;
   if (classNumber >= 9 && classNumber <= 10) return 250;
-
   return 0;
 };
 
@@ -30,13 +29,13 @@ const MonthlyPaymentPage: React.FC = () => {
     email: "",
     phone: "",
     class: "",
+    monthlyPayments: [],
   });
   const [loading, setLoading] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
 
-  /* ✅ CALCULATED MONTHLY FEE (UI ONLY) */
   const monthlyFee = getMonthlyFee(formData.class);
 
   useEffect(() => {
@@ -55,11 +54,44 @@ const MonthlyPaymentPage: React.FC = () => {
     }
   };
 
+  /* ✅ Check if student already paid this month */
+  const alreadyPaidThisMonth = (student: StudentData): boolean => {
+    const now = new Date();
+    return (
+      student.monthlyPayments?.some((p) => {
+        const d = new Date(p.date);
+        return (
+          d.getMonth() === now.getMonth() &&
+          d.getFullYear() === now.getFullYear()
+        );
+      }) || false
+    );
+  };
+
+  /* 🔥 UPDATED: CHECK REGISTRATION USING ALL DETAILS */
   const checkRegistration = async (): Promise<boolean> => {
+    const { name, email, phone, class: studentClass } = formData;
+
+    if (!name || !email || !phone || !studentClass) {
+      toast.error("Please enter all student details.");
+      return false;
+    }
+
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/student/status/${formData.email}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/student/status`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            email,
+            phone,
+            class: studentClass,
+          }),
+        }
       );
+
       const data = await res.json();
 
       if (!data.registered) {
@@ -73,10 +105,18 @@ const MonthlyPaymentPage: React.FC = () => {
         email: data.student.email,
         phone: data.student.phone,
         class: data.student.class,
+        monthlyPayments: data.student.monthlyPayments || [],
       });
+
       setIsRegistered(true);
+
+      if (alreadyPaidThisMonth(data.student)) {
+        toast.error("You have already paid this month's fee.");
+        return false;
+      }
+
       return true;
-    } catch {
+    } catch (err) {
       toast.error("Failed to verify registration.");
       return false;
     }
@@ -91,10 +131,6 @@ const MonthlyPaymentPage: React.FC = () => {
     if (!(await checkRegistration())) return;
 
     const { email, name, phone, class: studentClass } = formData;
-    if (!email || !name || !phone || !studentClass) {
-      toast.error("All student details are required.");
-      return;
-    }
 
     setLoading(true);
     try {
@@ -114,6 +150,7 @@ const MonthlyPaymentPage: React.FC = () => {
       );
 
       const data = await res.json();
+
       if (!res.ok) {
         toast.error(data.message || "Failed to create order.");
         return;
@@ -133,7 +170,7 @@ const MonthlyPaymentPage: React.FC = () => {
 
       const razorpay = new (window as any).Razorpay(options);
       razorpay.open();
-    } catch {
+    } catch (err) {
       toast.error("Failed to initiate payment.");
     } finally {
       setLoading(false);
@@ -151,12 +188,9 @@ const MonthlyPaymentPage: React.FC = () => {
         <h1 className="text-3xl font-bold text-pink-500 mb-4">
           🎉 Payment Successful!
         </h1>
-        <p className="mb-6 text-purple-700 text-lg">
-          Your monthly fee payment is completed successfully.
-        </p>
         <button
           onClick={() => router.push("/")}
-          className="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-6 py-3 rounded-lg"
+          className="bg-pink-500 text-white px-6 py-3 rounded-lg"
         >
           Back to Home
         </button>
@@ -229,13 +263,9 @@ const MonthlyPaymentPage: React.FC = () => {
         <button
           type="submit"
           disabled={loading || !razorpayLoaded}
-          className="bg-pink-500 w-full text-white py-3 rounded-lg hover:bg-pink-600"
+          className="bg-pink-500 w-full text-white py-3 rounded-lg"
         >
-          {loading
-            ? "Processing..."
-            : monthlyFee
-            ? `Pay Monthly Fee (₹${monthlyFee})`
-            : "Pay Monthly Fee"}
+          {loading ? "Processing..." : `Pay Monthly Fee (₹${monthlyFee})`}
         </button>
       </form>
     </div>

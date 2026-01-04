@@ -39,14 +39,21 @@ const AdmissionPage: React.FC = () => {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/student/status/${formData.email}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/student/status`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", 
+          },
+          body:JSON.stringify(formData),
+        }
       );
       const data = await res.json();
 
       console.log("🔍 Registration status response:", data);
 
       if (data.registered) {
-        toast.error("This email is already registered!");
+        toast.error("You are already registered with these details!");
         setIsSubmitting(false);
         return;
       }
